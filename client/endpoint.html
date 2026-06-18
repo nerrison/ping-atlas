@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale = 1.0" />
+        <title>PingAtlas: endpoint</title>
+
+        <!-- tailwind cdn -->
+         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    </head>
+
+    <body class="text-gray-900 font-mono tracking-wide">
+
+        <!--header-->
+        <div data-include="/client/components/header.v1.html" class="mb-10"></div>
+
+        <!--main-->
+        <main class="max-w-6xl mx-auto px-4 py-6 mb-10">
+            <!-- Breadcrumb -->
+            <div id="breadcrumb" class="mb-6 text-sm text-gray-600"></div>
+
+            <section>
+                <div class="mb-14">
+                    <div class="flex justify-between items-center mb-12">
+
+                        <div>
+                            <div>
+                                <h1 id="endpointurl" class="text-2xl font-bold mb-4">Endpoint Details</h1>
+                                <div id="description"></div>
+                            </div> 
+                        </div>
+                        <!-- Action Buttons -->
+                        <button id="reportButton" class="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-medium focus:outline-none border bg-black text-gray-200 border-gray-300 ">
+                            Raise Report
+                        </button>
+                        
+                    </div>
+                    <div class="grid md:grid-cols-5 md:gap-auto gap-4 uppercase">
+                        <div>
+                            <h3 class="text-gray-500">Status</h3>
+                            <div id="status" class="font-bold"></div>
+                        </div>
+                        <div>
+                            <h3 class="text-gray-500">Type</h3>
+                            <div id="type" class="font-bold"></div>
+                        </div>
+                        <div>
+                            <h3 class="text-gray-500">Method</h3>
+                            <div id="method" class="font-bold"></div>
+                        </div>
+                        <div>
+                            <h3 class="text-gray-500">Uptime</h3>
+                            <div id="uptime"></div>
+                        </div>  
+                        <div>
+                            <h3 class="text-gray-500">last check</h3>
+                            <div id="lastcheck" class="normal-case"></div>
+                        </div>           
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h1 class="text-2xl font-bold py-10">Chart</h1>
+                <div class="flex gap-10 mb-14">
+                    <button class="timeline-btn px-3 py-1 border" data-range="1h">1H</button>
+                    <button class="timeline-btn px-3 py-1 border" data-range="1d">1D</button>
+                    <button class="timeline-btn px-3 py-1 border" data-range="1w">1W</button>
+                    <button class="timeline-btn px-3 py-1 border" data-range="1m">1M</button>
+                    <button class="timeline-btn px-3 py-1 border" data-range="1y">1Y</button>
+                </div>
+
+                <div id="line-chart"></div>
+            </section>
+
+            <section>
+                    <div class="flex gap-10 items-basline">
+                        <p class="font-bold text-2xl">Incidents</p>
+                    
+                        <ol class="relative border-l border-gray-400">                  
+                            <li class="mb-10 ms-4">
+                                <div class="absolute w-3 h-3 bg-gray-300 rounded-full mt-1.5 -start-1.5 border border-gray-400"></div>
+                                <time class="text-sm font-normal leading-none text-body">24/06/26 1:53</time>
+                                <h3 class="text-lg font-semibold text-heading my-2">https://st.com/api/status</h3>
+                                <p class="mb-4 text-base font-normal text-body">Error</p>
+                            </li>
+                            <li class="mb-10 ms-4">
+                                <div class="absolute w-3 h-3 bg-gray-300 rounded-full mt-1.5 -start-1.5 border border-gray-400"></div>
+                                <time class="text-sm font-normal leading-none text-body">24/06/26 1:51</time>
+                                <h3 class="text-lg font-semibold text-heading my-2">https://st.com/api/status</h3>
+                                <p class="text-base font-normal text-body">Error</p>
+                            </li>
+                            <li class="mb-10 ms-4">
+                                <div class="absolute w-3 h-3 bg-gray-300 rounded-full mt-1.5 -start-1.5 border border-gray-400"></div>
+                                <time class="mb-1 text-sm font-normal leading-none text-body">24/06/26 1:49</time>
+                                <h3 class="text-lg font-semibold text-heading my-2">https://st.com/api/status</h3>
+                                <p class="text-base font-normal text-body">Error</p>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+
+            </section>
+        </main>
+
+        <!--footer-->
+        <div data-include="/client/components/footer.v1.html"></div>
+
+        <!--component script-->
+        <script src="/client/js/include.js"></script>
+        <!--chart script-->
+        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+        <script src="/client/js/chart.js"></script>
+        <!--data script-->
+        <script src="/client/js/loadendpoint.js"></script>
+
+    </body>
+</html>
