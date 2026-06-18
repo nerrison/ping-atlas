@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale = 1.0" />
+        <title>PingAtlas: Group</title>
+
+        <!-- tailwind cdn -->
+         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    </head>
+
+    <body class="text-gray-900 font-mono tracking-wide">
+
+        <!--header-->
+        <div data-include="/client/components/header.v1.html" class="mb-10"></div>
+
+        <!--main-->
+        <main class="max-w-6xl mx-auto px-4 py-6 mb-10">
+            <!-- Breadcrumb -->
+            <div id="breadcrumb" class="mb-6 text-sm text-gray-600"></div>
+
+            <!-- Group Info -->
+            <section class="mb-10" id="groupInfo">
+                
+                <div class="flex justify-between items-center mb-12">
+                    <div>
+                        <div>
+                            <h1 id="groupname" class="text-2xl font-bold mb-4">Group Details</h1>
+                            <h3 class="text-gray-500">Description</h3>
+                            <div id="description"></div>
+                        </div> 
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <button id="reportButton" class="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-medium focus:outline-none border bg-black text-gray-200 border-gray-300 ">
+                        Raise Report
+                    </button>
+                    
+                </div>
+
+                <div class="grid md:grid-cols-4 gap-6 my-4">
+                    <div>
+                        <h3 class="text-gray-500">Base URL</h3>
+                        <div id="baseUrl" class="font-bold"></div>
+                    </div>
+                    <div>
+                        <h3 class="text-gray-500">Uptime</h3>
+                        <div id="uptime"></div>
+                    </div>
+                    <div>
+                        <h3 class="text-gray-500">Response</h3>
+                        <div id="response"></div>
+                    </div>             
+                </div>
+            </section>
+
+            <section id="tab-live" >
+                <div class="mb-15">
+                    <table class="w-full ">
+                        <thead class="text-md text-gray-700  text-center uppercase">
+                            <tr class="border-b hover:bg-gray-50 transition">
+                                <th class="px-4 py-3">status</th>
+                                <th class="px-4 py-3">url</th>
+                                <th class="px-4 py-3">type</th>
+                                <th class="px-4 py-3">method</th>
+                                <th class="px-4 py-3">uptime</th>
+                                <th class="px-4 py-3">last check</th>
+                                <th class="px-4 py-3">description</th>
+                            </tr>
+                        </thead>
+                        <tbody id="endpoints" class="text-gray-500"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section>
+                <div class="flex gap-10 items-basline">
+                    <p class="font-bold text-2xl">Incidents</p>
+                
+                    <ol class="relative border-l border-gray-400">                  
+                        <li class="mb-10 ms-4">
+                            <div class="absolute w-3 h-3 bg-gray-300 rounded-full mt-1.5 -start-1.5 border border-gray-400"></div>
+                            <time class="text-sm font-normal leading-none text-body">24/06/26 1:53</time>
+                            <h3 class="text-lg font-semibold text-heading my-2">https://st.com/api/status"</h3>
+                            <p class="mb-4 text-base font-normal text-body">Error</p>
+                        </li>
+                        <li class="mb-10 ms-4">
+                            <div class="absolute w-3 h-3 bg-gray-300 rounded-full mt-1.5 -start-1.5 border border-gray-400"></div>
+                            <time class="text-sm font-normal leading-none text-body">24/06/26 1:51</time>
+                            <h3 class="text-lg font-semibold text-heading my-2">https://st.com/api/products"</h3>
+                            <p class="text-base font-normal text-body">Error</p>
+                        </li>
+                        <li class="mb-10 ms-4">
+                            <div class="absolute w-3 h-3 bg-gray-300 rounded-full mt-1.5 -start-1.5 border border-gray-400"></div>
+                            <time class="mb-1 text-sm font-normal leading-none text-body">24/06/26 1:49</time>
+                            <h3 class="text-lg font-semibold text-heading my-2">https://st.com/api/orders"</h3>
+                            <p class="text-base font-normal text-body">Error</p>
+                        </li>
+                    </ol>
+                </div>    
+            </section>
+
+        </main>
+
+        <!--footer-->
+        <div data-include="/client/components/footer.v1.html"></div>
+
+        <!--component script-->
+        <script src="/client/js/include.js"></script>
+        <!--data script-->
+        <script src="/client/js//loadgroup.js"></script>
+
+    </body>
+</html>
