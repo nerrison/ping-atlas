@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale = 1.0" />
+        <title>PingAtlas: Home</title>
+
+        <!-- tailwind cdn -->
+         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    </head>
+
+    <body class="text-gray-900 font-mono tracking-wide">
+
+        <!--header-->
+        <div data-include="/client/components/header.v1.html" class="mb-10"></div>
+
+        <!--main-->
+        <main class="max-w-6xl mx-auto px-4 py-6 mb-10">
+
+            <!--msg & search section -->
+            <section class="landing-msg">
+
+                <div class="mb-10">
+                    <h1 class="font-bold text-4xl max-w-3xl mx-auto leading-tight text-center">
+                        PingAtlas is a community-maintained map of uptime,not  a personal dashboard
+                    </h1>
+                </div>
+
+                <div class="w-full mb-10">
+
+                    <form class="flex items-center">
+                        <label for="simple-search" class="sr-only">Search table</label>
+                        <div class="relative w-full">
+                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <input type="text" id="simple-search" class="search border text-gray-900 text-sm  focus:ring-primary-500 focus:border-gray-500 block w-full pl-10 p-2" placeholder="Search table" required="">
+                        </div>
+                    </form>
+
+                </div>
+            </section>
+
+            <!--table section-->
+            <section>
+
+                <!--table-->
+                <table class="w-full text-sm text-left text-gray-700 ">
+                    <thead class="text-xs text-gray-900 uppercase">
+                        <tr class="border-b hover:bg-gray-50 transition">
+                            <th scope="col" class="px-4 py-3">status</th>
+                            <th scope="col" class="px-4 py-3">name</th>
+                            <th scope="col" class="px-4 py-3">type</th>
+                            <th scope="col" class="px-4 py-3">description</th>
+                            <th scope="col" class="px-4 py-3">response</th>
+                            <th scope="col" class="px-4 py-3">last check</th>
+                            <th scope="col" class="px-4 py-3">uptime</th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody id="resourceTableBody" class="border-b">
+                    </tbody>
+                </table>
+                
+            </section>
+            
+        </main>
+
+        <!--footer-->
+        <div data-include="/client/components/footer.v1.html"></div>
+
+        <!--component script-->
+        <script src="/client/js/include.js"></script>
+        <!--data script-->
+        <script src="/client/js/load.js"></script>
+
+    </body>
+</html>
