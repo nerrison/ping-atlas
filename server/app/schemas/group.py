@@ -7,7 +7,7 @@ from sqlalchemy.sql import func
 from app.db.database import Base
 
 
-class Group(Base):
+class GroupBase(Base):
     __tablename__ = "groups"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
@@ -24,8 +24,12 @@ class Group(Base):
         nullable=False
     )
 
+
     endpoints = relationship(
         "Endpoint",
         back_populates="group",
         cascade="all, delete-orphan"
     )
+
+class GroupCreate(GroupBase):
+        pass
