@@ -13,9 +13,8 @@ def create_group(group: GroupCreate, db: Session = Depends(get_db)):
 
     new_group = Group(
         name=group.name,
-        base_url=group.base_url,
         slug=group.slug,
-        type=group.item_type,
+        type=group.type,
         description=group.description
     )
 

@@ -1,13 +1,14 @@
 from uuid import UUID
 from datetime import datetime
+
 from pydantic import BaseModel, ConfigDict
 
 
 class HistoryBase(BaseModel):
-    latency: int | None = None
-    availability: int | None = None
-    error: int | None = None
-    check_time: datetime | None = None
+    latency: int | None = None  # ms
+    availability: float | None = None  # %
+    error_message: str | None = None
+    checked_at: datetime | None = None
 
 
 class HistoryCreate(HistoryBase):
@@ -16,9 +17,9 @@ class HistoryCreate(HistoryBase):
 
 class HistoryUpdate(BaseModel):
     latency: int | None = None
-    availability: int | None = None
-    error: int | None = None
-    check_time: datetime | None = None
+    availability: float | None = None
+    error_message: str | None = None
+    checked_at: datetime | None = None
 
 
 class HistoryResponse(HistoryBase):

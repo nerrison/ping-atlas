@@ -1,9 +1,16 @@
+from uuid import UUID
+from pydantic import BaseModel,Field
+
+
 class EndpointSummary(BaseModel):
     id: UUID
     url: str
+    method: str
 
-    model_config = ConfigDict(from_attributes=True)
+    
+class GroupSummary(BaseModel):
+    id: UUID
+    name: str
+    slug: str
 
-
-class GroupWithEndpoints(GroupResponse):
-    endpoints: list[EndpointSummary] = []
+    endpoints: list[EndpointSummary] = Field(default_factory=list)

@@ -1,35 +1,33 @@
-import uuid
-from sqlalchemy import Column, String, DateTime
-from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import relationship
-from sqlalchemy.sql import func
+from uuid import UUID
+from datetime import datetime
+from typing import Optional
 
-from app.db.database import Base
+from pydantic import BaseModel, ConfigDict, Field
 
-
-class GroupBase(Base):
-    __tablename__ = "groups"
-
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-
-    name = Column(String, unique=True, nullable=False)
-    slug = Column(String, unique=True, nullable=False, index=True)
-
-    type = Column(String)
-    description = Column(String)
-
-    created_at = Column(
-        DateTime(timezone=True),
-        server_default=func.now(),
-        nullable=False
-    )
+from .endpoint import EndpointResponse
 
 
-    endpoints = relationship(
-        "Endpoint",
-        back_populates="group",
-        cascade="all, delete-orphan"
-    )
+class GroupBase(BaseModel):
+    name: str
+    slug: str
+    type: Optional[str] = None
+    description: Optional[str] = None
+
 
 class GroupCreate(GroupBase):
-        pass
+    pass
+
+
+class GroupUpdate(BaseModel):
+    name: Optional[str] = None
+    slug: Optional[str] = None
+    type: Optional[str] = None
+    description: Optional[str] = None
+
+
+class GroupResponse(GroupBase):
+    id: UUID
+    created_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
+
