@@ -43,7 +43,7 @@ class EndpointResponse(EndpointBase):
 
     status: EndpointStatus
     response_time: int | None = None
-    last_check: datetime | None = None
+    last_timestamp: datetime | None = None
     uptime: int | None = None
 
     created_at: datetime

@@ -1,30 +1,38 @@
 from uuid import UUID
 from datetime import datetime
-
 from pydantic import BaseModel, ConfigDict
 
 
-class HistoryBase(BaseModel):
-    latency: int | None = None  # ms
-    availability: float | None = None  # %
-    error_message: str | None = None
-    checked_at: datetime | None = None
-
-
-class HistoryCreate(HistoryBase):
+class HistoryCreate(BaseModel):
     endpoint_id: UUID
 
+    latency: int
+    availability: float
+    errors: int = 0
 
-class HistoryUpdate(BaseModel):
-    latency: int | None = None
-    availability: float | None = None
-    error_message: str | None = None
-    checked_at: datetime | None = None
+    timestamp: datetime
 
-
-class HistoryResponse(HistoryBase):
+class HistoryResponse(BaseModel):
     id: UUID
     endpoint_id: UUID
+
+    latency: int
+    availability: float
+    errors: int
+
+    timestamp: datetime
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
+
+class MetricPoint(BaseModel):
+    timestamp: datetime
+    latency: int
+    availability: float
+    errors: int
+
+class HistoryRange(BaseModel):
+    points: list[MetricPoint]
+
+class HistoryChartResponse(BaseModel):
+    history: dict[str, HistoryRange]
