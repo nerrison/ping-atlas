@@ -1,5 +1,6 @@
 from uuid import UUID
 from datetime import datetime
+
 from pydantic import BaseModel, ConfigDict
 
 
@@ -8,9 +9,10 @@ class HistoryCreate(BaseModel):
 
     latency: int
     availability: float
-    errors: int = 0
+    error: int = 0
 
-    timestamp: datetime
+    check_time: datetime
+
 
 class HistoryResponse(BaseModel):
     id: UUID
@@ -18,21 +20,24 @@ class HistoryResponse(BaseModel):
 
     latency: int
     availability: float
-    errors: int
+    error: int
 
-    timestamp: datetime
+    check_time: datetime
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
 
+
 class MetricPoint(BaseModel):
-    timestamp: datetime
+    check_time: datetime
     latency: int
     availability: float
     errors: int
 
+
 class HistoryRange(BaseModel):
     points: list[MetricPoint]
+
 
 class HistoryChartResponse(BaseModel):
     history: dict[str, HistoryRange]

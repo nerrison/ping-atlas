@@ -1,47 +1,60 @@
+from __future__ import annotations
+
 import uuid
+from datetime import datetime
+from typing import TYPE_CHECKING
+
 from sqlalchemy import (
-    Column,
     String,
     Integer,
     DateTime,
-    ForeignKey
+    ForeignKey,
+    func,
 )
-from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.sql import func
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.database import Base
+
+if TYPE_CHECKING:
+    from app.models.endpoint import Endpoint
 
 
 class Incident(Base):
     __tablename__ = "incidents"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        primary_key=True,
+        default=uuid.uuid4,
+    )
 
-    endpoint_id = Column(
+    endpoint_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True),
         ForeignKey("endpoints.id"),
         nullable=False,
-        index=True
+        index=True,
     )
 
-    endpoint_url = Column(String)
+    endpoint_url: Mapped[str | None] = mapped_column(String)
 
-    incident_time = Column(DateTime)
+    occurred_at: Mapped[datetime | None] = mapped_column(DateTime)
 
-    error_msg = Column(String, nullable=True)
+    error_message: Mapped[str | None] = mapped_column(
+        String,
+        nullable=True,
+    )
 
-    status = Column(String)
+    status: Mapped[str | None] = mapped_column(String)
 
-    last_status_code = Column(Integer)
+    status_code: Mapped[int | None] = mapped_column(Integer)
 
-    created_at = Column(
+    created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),
-        nullable=False
+        nullable=False,
     )
 
-    endpoint = relationship(
-        "Endpoint",
-        back_populates="incidents"
+    endpoint: Mapped["Endpoint"] = relationship(
+        back_populates="incidents",
     )

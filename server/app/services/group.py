@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
-from app.schemas.group import GroupCreate
+from app.schemas.group import GroupCreate, GroupResponse, GroupUpdate
+from app.schemas.summary import GroupSummary
 from app.repositories.group import GroupRepository
 import re
 
@@ -24,3 +25,13 @@ class GroupService:
         
 
         return self.repo.create(db, data, slug)
+    
+    def get_group(self, db, data:GroupSummary, id):
+        pass
+
+    def list_groups(self, db, data:GroupResponse, id):
+        pass
+
+    def update_group(self, db, data:GroupUpdate,id):
+        pass
+

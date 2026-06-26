@@ -1,65 +1,83 @@
+from __future__ import annotations
+
 import uuid
+from datetime import datetime
+from typing import TYPE_CHECKING
+
 from sqlalchemy import (
-    Column,
     String,
     Integer,
     DateTime,
     ForeignKey,
     Enum,
-    func
+    func,
 )
-from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.database import Base
+
+if TYPE_CHECKING:
+    from app.models.group import Group
+    from app.models.history import History
+    from app.models.incident import Incident
 
 
 class Endpoint(Base):
     __tablename__ = "endpoints"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        primary_key=True,
+        default=uuid.uuid4,
+    )
 
-    group_id = Column(
+    group_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True),
         ForeignKey("groups.id"),
         nullable=False,
-        index=True
+        index=True,
     )
 
-    type = Column(String)
+    type: Mapped[str | None] = mapped_column(String)
 
-    status = Column(
+    status: Mapped[str] = mapped_column(
         Enum("UP", "DOWN", "DEGRADED", name="endpoint_status"),
-        nullable=False
+        nullable=False,
     )
 
-    url = Column(String, nullable=False)
-    description = Column(String)
-    method = Column(String, nullable=False)
+    url: Mapped[str] = mapped_column(
+        String,
+        nullable=False,
+    )
 
-    response_time = Column(Integer)
-    last_check = Column(DateTime)
-    uptime = Column(Integer)
+    description: Mapped[str | None] = mapped_column(String)
 
-    created_at = Column(
+    method: Mapped[str] = mapped_column(
+        String,
+        nullable=False,
+    )
+
+    response_time: Mapped[int | None] = mapped_column(Integer)
+    last_check: Mapped[datetime | None] = mapped_column(DateTime)
+    uptime: Mapped[int | None] = mapped_column(Integer)
+
+    created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),
-        nullable=False
+        nullable=False,
     )
 
-    group = relationship(
-        "Group",
-        back_populates="endpoints"
+    group: Mapped["Group"] = relationship(
+        back_populates="endpoints",
     )
 
-    histories = relationship(
-        "History",
+    histories: Mapped[list["History"]] = relationship(
         back_populates="endpoint",
-        cascade="all, delete-orphan"
+        cascade="all, delete-orphan",
     )
 
-    incidents = relationship(
-        "Incident",
+    incidents: Mapped[list["Incident"]] = relationship(
         back_populates="endpoint",
-        cascade="all, delete-orphan"
+        cascade="all, delete-orphan",
     )

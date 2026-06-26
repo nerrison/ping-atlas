@@ -7,16 +7,19 @@ from pydantic import BaseModel, ConfigDict
 from .history import HistoryResponse
 from .incident import IncidentResponse
 
+from enum import StrEnum
 
-EndpointStatus = Literal["UP", "DOWN", "DEGRADED"]
+class EndpointStatus(StrEnum):
+    UP = "UP"
+    DOWN = "DOWN"
+    DEGRADED = "DEGRADED"
 
-HTTPMethod = Literal[
-    "GET",
-    "POST",
-    "PUT",
-    "PATCH",
-    "DELETE"
-]
+class HTTPMethod(StrEnum):
+    GET = "GET"
+    POST = "POST"
+    PUT = "PUT"
+    PATCH = "PATCH"
+    DELETE = "DELETE"
 
 
 class EndpointBase(BaseModel):
@@ -54,7 +57,7 @@ class EndpointResponse(EndpointBase):
 class EndpointDetail(BaseModel):
     endpoint: EndpointResponse
 
-    history: list[HistoryResponse]
-    incidents: list[IncidentResponse]
+    history: list[HistoryResponse]=[]
+    incidents: list[IncidentResponse]=[]
 
     model_config = ConfigDict(from_attributes=True)

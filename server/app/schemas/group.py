@@ -1,17 +1,14 @@
 from uuid import UUID
 from datetime import datetime
-from typing import Optional
 
-from pydantic import BaseModel, ConfigDict, Field
-
-from .endpoint import EndpointResponse
+from pydantic import BaseModel, ConfigDict
 
 
 class GroupBase(BaseModel):
     name: str
     slug: str
-    type: Optional[str] = None
-    description: Optional[str] = None
+    type: str | None = None
+    description: str | None = None
 
 
 class GroupCreate(GroupBase):
@@ -19,10 +16,10 @@ class GroupCreate(GroupBase):
 
 
 class GroupUpdate(BaseModel):
-    name: Optional[str] = None
-    slug: Optional[str] = None
-    type: Optional[str] = None
-    description: Optional[str] = None
+    name: str | None = None
+    slug: str | None = None
+    type: str | None = None
+    description: str | None = None
 
 
 class GroupResponse(GroupBase):
@@ -30,4 +27,3 @@ class GroupResponse(GroupBase):
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
-
