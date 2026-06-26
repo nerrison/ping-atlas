@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from app.db.database import Base,engine
 from app.routes import groups
+from app.routes import endpoints
 from app.db.init_db import init_db
 
 app = FastAPI()
@@ -17,5 +18,8 @@ def db_test():
         return {"database": "connected"}
     
 app.include_router(groups.router)
+
+app.include_router(endpoints.group_router)
+app.include_router(endpoints.endpoint_router)
     
     

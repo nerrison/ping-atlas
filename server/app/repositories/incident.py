@@ -1,63 +1,62 @@
 from uuid import UUID
+from datetime import datetime
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from typing import List
 
 from app.models.incident import Incident
-from app.schemas.incident import IncidentCreate
 
 
 class IncidentRepository:
+    def __init__(self, db: Session):
+        self.db = db
 
-    def get_by_id(self, db: Session, id: UUID):
-        return db.get(Incident, id)
+    def create(
+        self,
+        endpoint_id: UUID,
+        endpoint_url: str | None,
+        status: str | None,
+        status_code: int | None,
+        error_message: str | None,
+        occurred_at: datetime,
+    ):
+        incident = Incident(
+            endpoint_id=endpoint_id,
+            endpoint_url=endpoint_url,
+            status=status,
+            status_code=status_code,
+            error_message=error_message,
+            occurred_at=occurred_at,
+        )
 
-    def get_by_endpoint(self, db: Session, endpoint_id: UUID):
-        stmt = (
+        self.db.add(incident)
+        self.db.commit()
+        self.db.refresh(incident)
+        return incident
+
+    def get_by_id(self, id: UUID):
+        return self.db.get(Incident, id)
+
+    def get_by_endpoint(self, endpoint_id: UUID):
+        return self.db.scalars(
             select(Incident)
             .where(Incident.endpoint_id == endpoint_id)
             .order_by(Incident.occurred_at.desc())
-        )
-        return db.scalars(stmt).all()
+        ).all()
 
-    def list(self, db: Session):
-        return db.scalars(select(Incident)).all()
+    def list(self):
+        return self.db.scalars(select(Incident)).all()
 
-    def create(self, db: Session, data: IncidentCreate):
-        incident = Incident(
-            endpoint_id=data.endpoint_id,
-            occurred_at=data.occurred_at,
-            error_message=data.error_message,
-            status_code=data.status_code,
-        )
-
-        db.add(incident)
-        db.commit()
-        db.refresh(incident)
-        return incident
-
-    def delete(self, db: Session, id: UUID):
-        incident = db.get(Incident, id)
-
-        if not incident:
-            return False
-
-        db.delete(incident)
-        db.commit()
-        return True
-
-    def get_recent(self, db: Session, limit: int = 50):
-        stmt = (
+    def get_recent(self, limit: int = 50):
+        return self.db.scalars(
             select(Incident)
             .order_by(Incident.occurred_at.desc())
             .limit(limit)
-        )
-        return db.scalars(stmt).all()
+        ).all()
 
-    def get_multi_endpoint(self, db: Session, endpoint_ids: List[UUID]):
-        stmt = (
+    def get_multi_endpoint(self, endpoint_ids: List[UUID]):
+        return self.db.scalars(
             select(Incident)
             .where(Incident.endpoint_id.in_(endpoint_ids))
             .order_by(Incident.occurred_at.desc())
-        )
-        return db.scalars(stmt).all()
+        ).all()

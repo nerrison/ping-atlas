@@ -32,7 +32,7 @@ class MetricPoint(BaseModel):
     check_time: datetime
     latency: int
     availability: float
-    errors: int
+    error: int
 
 
 class HistoryRange(BaseModel):

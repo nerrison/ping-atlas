@@ -1,37 +1,43 @@
 from sqlalchemy.orm import Session
-from app.schemas.group import GroupCreate, GroupResponse, GroupUpdate
-from app.schemas.summary import GroupSummary
+from app.schemas.group import GroupCreate, GroupUpdate
 from app.repositories.group import GroupRepository
 import re
 
 
 def generate_slug(name: str) -> str:
     slug = name.lower().strip()
-    slug = re.sub(r"\s+", "-", slug)       # spaces → hyphens
-    slug = re.sub(r"[^a-z0-9\-]", "", slug)  # remove invalid chars
+    slug = re.sub(r"\s+", "-", slug)
+    slug = re.sub(r"[^a-z0-9\-]", "", slug)
     return slug
 
 class GroupService:
-    def __init__(self):
-        self.repo = GroupRepository()
+    def __init__(self, repo: GroupRepository):
+        self.repo = repo
 
-    def create_group(self, db, data: GroupCreate):
+
+    def list_groups(self):
+        return self.repo.list()
+
+    def get_group(self, group_id):
+        return self.repo.get_by_id( group_id)
+
+    def create_group(self, data: GroupCreate):
+        existing = self.repo.get_by_slug(generate_slug(data.name))
+        if existing:
+            raise ValueError("Group already exists")
+
+        if len(data.name) < 3:
+            raise ValueError("Name too short")
 
         slug = generate_slug(data.name)
 
-        # ensure uniqueness
-        if self.repo.get_by_slug(db, slug):
-            raise ValueError("Group already exists")
-        
+        return self.repo.create(data, slug)
 
-        return self.repo.create(db, data, slug)
-    
-    def get_group(self, db, data:GroupSummary, id):
-        pass
+    def update_group(self, group_id, data: GroupUpdate):
+        return self.repo.put(data, group_id)
 
-    def list_groups(self, db, data:GroupResponse, id):
-        pass
+    def patch_group(self, group_id, data: GroupUpdate):
+        return self.repo.patch(data, group_id)
 
-    def update_group(self, db, data:GroupUpdate,id):
-        pass
-
+    def delete_group(self, group_id):
+        return self.repo.delete(group_id)

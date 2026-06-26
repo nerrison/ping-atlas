@@ -10,6 +10,7 @@ from sqlalchemy import (
     DateTime,
     ForeignKey,
     Enum,
+    UniqueConstraint,
     func,
 )
 from sqlalchemy.dialects.postgresql import UUID
@@ -26,6 +27,10 @@ if TYPE_CHECKING:
 class Endpoint(Base):
     __tablename__ = "endpoints"
 
+    __table_args__ = (
+        UniqueConstraint("group_id", "url"),
+    )
+    
     id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True),
         primary_key=True,
@@ -48,7 +53,7 @@ class Endpoint(Base):
 
     url: Mapped[str] = mapped_column(
         String,
-        nullable=False,
+        nullable=False,unique=True
     )
 
     description: Mapped[str | None] = mapped_column(String)
