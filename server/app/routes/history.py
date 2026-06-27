@@ -37,9 +37,10 @@ def endpoint_chart(
     return service.get_endpoint_chart(endpoint_id)
 
 
-@router.post("/chart/multi")
-def multi_chart(
-    endpoint_ids: list[UUID],
-    service: HistoryService = Depends(get_history_service),
-):
-    return service.get_multi_endpoint_chart(endpoint_ids)
+#@router.post("/chart/multi")
+#def multi_chart(
+#    endpoint_ids: list[UUID],
+#    service: HistoryService = Depends#(get_history_service),
+#):
+#    return service.get_multi_endpoint_chart#(endpoint_ids)
+#
