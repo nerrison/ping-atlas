@@ -1,13 +1,35 @@
-#python virtual environment
+# Python virtual environments
 **/venv/
 
-#environment variables
+# Environment variables and secrets
 .env
 **/.env
 
-#
+# ignored directories
 **/nothing/
 
+# Python cache files
+**/__pycache__/
 
-#
-**/__pycache__
+# Compiled Python bytecode
+**/*.pyc
+
+# Pytest cache
+**/.pytest_cache/
+
+# Distribution/build files
+build/
+dist/
+*.egg-info/
+
+# Coverage reports
+.coverage
+htmlcov/
+
+# IDE/editor files
+.vscode/
+.idea/
+
+# OS generated files
+.DS_Store
+Thumbs.db

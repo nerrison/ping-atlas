@@ -1,22 +1,26 @@
 import os
-from urllib.parse import quote_plus
-from dotenv import load_dotenv
+from sqlalchemy import create_engine, MetaData
+from sqlalchemy.orm import declarative_base, sessionmaker
+from sqlalchemy.engine import URL
+from app.core import env_config
 
-from sqlalchemy import create_engine
-from sqlalchemy.orm import declarative_base
+env_config.load_dotenv()
 
-load_dotenv()
-
-password = quote_plus(os.getenv("DB_PASSWORD") or "")
-
-DATABASE_URL = (
-    f"postgresql://{os.getenv('DB_USER')}:"
-    f"{password}@"
-    f"{os.getenv('DB_HOST')}:"
-    f"{os.getenv('DB_PORT')}/"
-    f"{os.getenv('DB_NAME')}"
+DATABASE_URL = URL.create(
+    drivername="postgresql+psycopg2",
+    username=env_config.DB_USER,
+    password=env_config.DB_PASSWORD,
+    host=env_config.DB_HOST,
+    port=env_config.DB_PORT,
+    database=env_config.DB_NAME,
 )
 
-engine = create_engine(DATABASE_URL)
+engine = create_engine(DATABASE_URL,connect_args={"options": "-csearch_path=public"}, echo=False)
+
+SessionLocal = sessionmaker(
+    autocommit=False,
+    autoflush=False,
+    bind=engine
+)
 
 Base = declarative_base()
