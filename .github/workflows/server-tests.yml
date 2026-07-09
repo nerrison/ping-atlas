@@ -34,7 +34,7 @@ jobs:
       DB_PASSWORD: postgres
       DB_HOST: localhost
       DB_PORT: 5432
-      DB_NAME: test_db
+      DB_NAME: test_pingatlasdb
 
     steps:
       - uses: actions/checkout@v5
