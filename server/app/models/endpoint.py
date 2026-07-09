@@ -44,6 +44,8 @@ class Endpoint(Base):
         index=True,
     )
 
+    name = mapped_column(String, nullable=False)
+
     type: Mapped[str | None] = mapped_column(String)
 
     status: Mapped[str] = mapped_column(

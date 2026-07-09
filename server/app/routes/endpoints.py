@@ -84,7 +84,6 @@ def patch_endpoint(
 
 @group_router.delete("/{endpoint_id}")
 def delete_endpoint(
-    group_id: UUID,
     endpoint_id: UUID,
     service: EndpointService = Depends(get_endpoint_service),
 ):

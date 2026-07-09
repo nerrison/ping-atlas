@@ -6,7 +6,6 @@ from pydantic import BaseModel, ConfigDict
 
 class GroupBase(BaseModel):
     name: str
-    slug: str
     type: str | None = None
     description: str | None = None
 
@@ -14,16 +13,18 @@ class GroupBase(BaseModel):
 class GroupCreate(GroupBase):
     pass
 
+class GroupUpdate(GroupBase):
+    pass
 
-class GroupUpdate(BaseModel):
+class GroupPatch(BaseModel):
     name: str | None = None
-    slug: str | None = None
     type: str | None = None
     description: str | None = None
 
 
 class GroupResponse(GroupBase):
     id: UUID
+    slug: str
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)

@@ -2,9 +2,9 @@ from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
 from app.routes import groups, endpoints, search, history, incidents
-from app.core.bootstrap import load_dotenv
+from app.core.bootstrap import load_environment
 
-load_dotenv()
+load_environment()
 
 app = FastAPI()
 

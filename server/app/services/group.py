@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from app.schemas.group import GroupCreate, GroupUpdate
+from app.schemas.group import GroupCreate, GroupUpdate, GroupPatch
 from app.repositories.group import GroupRepository
 import re
 
@@ -19,7 +19,12 @@ class GroupService:
         return self.repo.list()
 
     def get_group(self, group_id):
-        return self.repo.get_by_id( group_id)
+        group = self.repo.get_by_id(group_id)
+
+        if group is None:
+            raise ValueError("Group not found")
+        
+        return group
 
     def create_group(self, data: GroupCreate):
         existing = self.repo.get_by_slug(generate_slug(data.name))
@@ -34,10 +39,15 @@ class GroupService:
         return self.repo.create(data, slug)
 
     def update_group(self, group_id, data: GroupUpdate):
-        return self.repo.put(data, group_id)
+        slug = generate_slug(data.name)
+        return self.repo.put(data, group_id, slug)
 
-    def patch_group(self, group_id, data: GroupUpdate):
-        return self.repo.patch(data, group_id)
+    def patch_group(self, group_id, data: GroupPatch):
+        slug = None
+        
+        if data.name is not None:
+            slug = generate_slug(data.name) 
+        return self.repo.patch(data, group_id, slug)
 
     def delete_group(self, group_id):
         return self.repo.delete(group_id)

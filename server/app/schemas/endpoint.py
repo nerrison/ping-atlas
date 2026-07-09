@@ -23,6 +23,7 @@ class HTTPMethod(StrEnum):
 
 
 class EndpointBase(BaseModel):
+    name: str
     type: str | None = None
     url: str
     description: str | None = None
@@ -34,6 +35,7 @@ class EndpointCreate(EndpointBase):
 
 
 class EndpointUpdate(BaseModel):
+    name: str | None = None
     type: str | None = None
     url: str | None = None
     description: str | None = None
@@ -43,7 +45,7 @@ class EndpointUpdate(BaseModel):
 class EndpointResponse(EndpointBase):
     id: UUID
     group_id: UUID
-
+    name: str
     status: EndpointStatus
     response_time: int | None = None
     last_timestamp: datetime | None = None

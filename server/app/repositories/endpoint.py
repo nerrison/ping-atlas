@@ -24,6 +24,7 @@ class EndpointRepository:
     def create(self, data: EndpointCreate, group_id: UUID):
         endpoint = Endpoint(
             group_id=group_id,
+            name = data.name,
             type=data.type,
             url=data.url,
             method=data.method,

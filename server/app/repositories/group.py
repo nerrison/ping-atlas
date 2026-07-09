@@ -3,7 +3,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.models.group import Group
-from app.schemas.group import GroupCreate, GroupUpdate
+from app.schemas.group import GroupCreate, GroupUpdate, GroupPatch
 
 
 class GroupRepository:
@@ -33,13 +33,13 @@ class GroupRepository:
         self.db.refresh(group)
         return group
 
-    def put(self, data: GroupUpdate, id: UUID):
+    def put(self, data: GroupUpdate, id: UUID, slug:str):
         group = self.db.get(Group, id)
         if not group:
             return None
 
         group.name = data.name or group.name
-        group.slug = data.slug or group.slug
+        group.slug = slug or group.slug
         group.type = data.type
         group.description = data.description
 
@@ -47,7 +47,7 @@ class GroupRepository:
         self.db.refresh(group)
         return group
 
-    def patch(self, data: GroupUpdate, id: UUID):
+    def patch(self, data: GroupPatch, id: UUID, slug):
         group = self.db.get(Group, id)
         if not group:
             return None
@@ -56,6 +56,9 @@ class GroupRepository:
 
         for key, value in update_data.items():
             setattr(group, key, value)
+
+        if slug is not None:
+            group.slug = slug
 
         self.db.commit()
         self.db.refresh(group)

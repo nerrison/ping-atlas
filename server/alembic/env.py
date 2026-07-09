@@ -1,14 +1,15 @@
 from logging.config import fileConfig
 
 from alembic import context
-from app.db.database import Base, engine
-from app.core import env_config
-from app.core.bootstrap import load_dotenv
-import app.models
 
+from app.core.bootstrap import load_environment
 
 #load environment variabl
-load_dotenv()
+load_environment()
+
+
+from app.db.database import Base, engine
+import app.models
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

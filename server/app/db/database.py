@@ -4,7 +4,6 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 from sqlalchemy.engine import URL
 from app.core import env_config
 
-env_config.load_dotenv()
 
 DATABASE_URL = URL.create(
     drivername="postgresql+psycopg2",
