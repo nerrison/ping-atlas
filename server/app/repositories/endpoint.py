@@ -36,10 +36,9 @@ class EndpointRepository:
         self.db.refresh(endpoint)
         return endpoint
 
-    def get(self, group_id: UUID, id: UUID):
+    def get(self, id: UUID):
         stmt = select(Endpoint).where(
             Endpoint.id == id,
-            Endpoint.group_id == group_id
         )
         return self.db.scalars(stmt).first()
 

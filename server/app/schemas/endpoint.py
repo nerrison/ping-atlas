@@ -31,7 +31,7 @@ class EndpointBase(BaseModel):
 
 
 class EndpointCreate(EndpointBase):
-    group_id: UUID
+    pass
 
 
 class EndpointUpdate(BaseModel):

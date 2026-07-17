@@ -3,6 +3,7 @@ from __future__ import annotations
 import uuid
 from datetime import datetime
 from typing import TYPE_CHECKING
+from enum import StrEnum
 
 from sqlalchemy import (
     String,
@@ -23,6 +24,11 @@ if TYPE_CHECKING:
     from app.models.history import History
     from app.models.incident import Incident
 
+class EndpointStatus(StrEnum):
+    UP = "UP"
+    DOWN = "DOWN"
+    DEGRADED = "DEGRADED"
+    UNKNOWN = "UNKNOWN"
 
 class Endpoint(Base):
     __tablename__ = "endpoints"
@@ -49,8 +55,9 @@ class Endpoint(Base):
     type: Mapped[str | None] = mapped_column(String)
 
     status: Mapped[str] = mapped_column(
-        Enum("UP", "DOWN", "DEGRADED", name="endpoint_status"),
+        Enum(EndpointStatus, name="endpoint_status"),
         nullable=False,
+        default=EndpointStatus.UNKNOWN,
     )
 
     url: Mapped[str] = mapped_column(
