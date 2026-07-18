@@ -5,15 +5,15 @@ from pydantic import BaseModel, ConfigDict
 
 
 class IncidentBase(BaseModel):
-    endpoint_id: UUID
-    endpoint_url: str | None = None
 
     occurred_at: datetime
+    ended_at:datetime | None
+
+    occurred_at_status_code: int 
+    ended_at_status_code: int | None = None
+
     error_message: str | None = None
-
-    status: str | None = None
-    status_code: int | None = None
-
+    
 
 class IncidentCreate(IncidentBase):
     pass

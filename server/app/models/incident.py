@@ -36,18 +36,16 @@ class Incident(Base):
         index=True,
     )
 
-    endpoint_url: Mapped[str | None] = mapped_column(String)
+    occurred_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+    ended_at: Mapped[datetime] = mapped_column(DateTime, nullable=True)
 
-    occurred_at: Mapped[datetime | None] = mapped_column(DateTime)
+    occurred_at_status_code: Mapped[int] = mapped_column(Integer, nullable=False)
+    ended_at_status_code: Mapped[int] = mapped_column(Integer, nullable=True)
 
     error_message: Mapped[str | None] = mapped_column(
         String,
         nullable=True,
     )
-
-    status: Mapped[str | None] = mapped_column(String)
-
-    status_code: Mapped[int | None] = mapped_column(Integer)
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),

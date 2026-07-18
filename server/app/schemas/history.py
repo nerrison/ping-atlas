@@ -5,7 +5,6 @@ from pydantic import BaseModel, ConfigDict
 
 
 class HistoryCreate(BaseModel):
-    endpoint_id: UUID
 
     latency: int
     availability: float

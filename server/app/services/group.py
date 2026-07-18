@@ -11,7 +11,8 @@ def generate_slug(name: str) -> str:
     return slug
 
 class GroupService:
-    def __init__(self, repo: GroupRepository):
+    def __init__(self,db:Session, repo: GroupRepository):
+        self.db = db
         self.repo = repo
 
 
@@ -19,6 +20,9 @@ class GroupService:
         return self.repo.list()
 
     def get_group(self, group_id):
+        if not group_id:
+            raise ValueError("No group found")
+        
         group = self.repo.get_by_id(group_id)
 
         if group is None:
@@ -27,27 +31,76 @@ class GroupService:
         return group
 
     def create_group(self, data: GroupCreate):
-        existing = self.repo.get_by_slug(generate_slug(data.name))
-        if existing:
-            raise ValueError("Group already exists")
+        try:
+            existing = self.repo.get_by_slug(generate_slug(data.name))
+            if existing:
+                raise ValueError("Group already exists")
 
-        if len(data.name) < 3:
-            raise ValueError("Name too short")
+            if len(data.name) < 3:
+                raise ValueError("Name too short")
 
-        slug = generate_slug(data.name)
+            slug = generate_slug(data.name)
+            group = self.repo.create(data,slug)
 
-        return self.repo.create(data, slug)
+            self.db.commit()
+            self.db.refresh(group)
+
+            return group
+        except Exception:
+            self.db.rollback()
+            raise
 
     def update_group(self, group_id, data: GroupUpdate):
-        slug = generate_slug(data.name)
-        return self.repo.put(data, group_id, slug)
+        try:
+            slug = generate_slug(data.name)
+            group = self.repo.put(data, group_id, slug)
+
+            if group is None:
+                raise ValueError("Group not found")
+
+            self.db.commit()
+            self.db.refresh(group)
+
+            return group
+        
+        except Exception:
+            self.db.rollback()
+            raise
 
     def patch_group(self, group_id, data: GroupPatch):
-        slug = None
         
-        if data.name is not None:
-            slug = generate_slug(data.name) 
-        return self.repo.patch(data, group_id, slug)
+        try:
+            slug = None
+        
+            if data.name is not None:
+                slug = generate_slug(data.name) 
+            
+            group = self.repo.patch(data, group_id, slug)
+
+            if group is None:
+                raise ValueError("Group not found")
+
+            self.db.commit()
+            self.db.refresh(group)
+
+            return group
+        
+        except Exception:
+            self.db.rollback()
+            raise
 
     def delete_group(self, group_id):
-        return self.repo.delete(group_id)
+        
+        try:
+            deleted = self.repo.delete(group_id)
+
+            if not deleted:
+                    raise ValueError("Group not found")
+
+            self.db.commit()
+
+            return True
+        
+        except Exception:
+            self.db.rollback()
+            raise

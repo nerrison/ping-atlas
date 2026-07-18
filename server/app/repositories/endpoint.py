@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from app.models.endpoint import Endpoint
 from app.models.group import Group
-from app.schemas.endpoint import EndpointCreate, EndpointUpdate
+from app.schemas.endpoint import EndpointCreate, EndpointUpdate, EndpointPut
 
 
 class EndpointRepository:
@@ -32,8 +32,6 @@ class EndpointRepository:
         )
 
         self.db.add(endpoint)
-        self.db.commit()
-        self.db.refresh(endpoint)
         return endpoint
 
     def get(self, id: UUID):
@@ -60,22 +58,29 @@ class EndpointRepository:
         for key, value in update_data.items():
             setattr(endpoint, key, value)
 
-        self.db.commit()
-        self.db.refresh(endpoint)
         return endpoint
 
-    def put(self, data: EndpointUpdate, id: UUID):
+    def put(self, data: EndpointPut, id: UUID):
         endpoint = self.db.get(Endpoint, id)
+
         if not endpoint:
             return None
 
-        endpoint.type = data.type or endpoint.type
-        endpoint.url = data.url or endpoint.url
-        endpoint.method = data.method or endpoint.method
-        endpoint.description = data.description or endpoint.description
+        if data.name is not None:
+            endpoint.name = data.name
 
-        self.db.commit()
-        self.db.refresh(endpoint)
+        if data.type is not None:
+            endpoint.type = data.type
+
+        if data.url is not None:
+            endpoint.url = data.url
+
+        if data.method is not None:
+            endpoint.method = data.method
+
+        if data.description is not None:
+            endpoint.description = data.description
+
         return endpoint
 
     def delete(self, id: UUID):
@@ -84,5 +89,5 @@ class EndpointRepository:
             return False
 
         self.db.delete(endpoint)
-        self.db.commit()
+
         return True

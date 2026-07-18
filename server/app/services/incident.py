@@ -1,10 +1,14 @@
 from uuid import UUID
+
+from sqlalchemy.orm import Session
+
 from app.repositories.incident import IncidentRepository
 from app.utils.time import utc_now
 
 
 class IncidentService:
-    def __init__(self, repo: IncidentRepository):
+    def __init__(self,db:Session ,repo: IncidentRepository):
+        self.db = db
         self.repo = repo
 
     def record_incident(

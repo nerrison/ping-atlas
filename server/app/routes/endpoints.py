@@ -5,7 +5,7 @@ from uuid import UUID
 from app.db.deps import get_db
 from app.repositories.endpoint import EndpointRepository
 from app.services.endpoint import EndpointService
-from app.schemas.endpoint import EndpointCreate, EndpointUpdate
+from app.schemas.endpoint import EndpointCreate, EndpointUpdate, EndpointPut
 
 
 group_router = APIRouter(
@@ -18,8 +18,8 @@ def get_endpoint_repo(db: Session = Depends(get_db)):
     return EndpointRepository(db)
 
 
-def get_endpoint_service(repo: EndpointRepository = Depends(get_endpoint_repo)):
-    return EndpointService(repo)
+def get_endpoint_service(db:Session= Depends(get_db),repo: EndpointRepository = Depends(get_endpoint_repo)):
+    return EndpointService(db,repo)
 
 
 @group_router.post("")
@@ -87,7 +87,7 @@ def get_endpoint(
 @endpoint_router.put("/{endpoint_id}")
 def update_endpoint(
     endpoint_id: UUID,
-    payload: EndpointUpdate,
+    payload: EndpointPut,
     service: EndpointService = Depends(get_endpoint_service),
 ):
     try:

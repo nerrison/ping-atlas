@@ -29,8 +29,6 @@ class GroupRepository:
         )
 
         self.db.add(group)
-        self.db.commit()
-        self.db.refresh(group)
         return group
 
     def put(self, data: GroupUpdate, id: UUID, slug:str):
@@ -43,8 +41,6 @@ class GroupRepository:
         group.type = data.type
         group.description = data.description
 
-        self.db.commit()
-        self.db.refresh(group)
         return group
 
     def patch(self, data: GroupPatch, id: UUID, slug):
@@ -60,8 +56,6 @@ class GroupRepository:
         if slug is not None:
             group.slug = slug
 
-        self.db.commit()
-        self.db.refresh(group)
         return group
 
     def delete(self, id: UUID):
@@ -70,5 +64,5 @@ class GroupRepository:
             return False
 
         self.db.delete(group)
-        self.db.commit()
+        
         return True

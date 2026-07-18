@@ -15,8 +15,8 @@ def get_group_repo(db: Session = Depends(get_db)):
     return GroupRepository(db)
 
 
-def get_group_service(repo: GroupRepository = Depends(get_group_repo)):
-    return GroupService(repo)
+def get_group_service(db:Session= Depends(get_db), repo: GroupRepository = Depends(get_group_repo)):
+    return GroupService(db,repo)
 
 
 @router.get("", response_model=list[GroupSummary])

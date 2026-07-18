@@ -42,6 +42,15 @@ def clean_database():
     db.close()
 
 @pytest.fixture
+def db():
+    db = SessionLocal()
+
+    try:
+        yield db
+    finally:
+        db.close()
+        
+@pytest.fixture
 def client():
     app.dependency_overrides[get_db] = override_get_db
 

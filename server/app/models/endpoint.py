@@ -30,6 +30,18 @@ class EndpointStatus(StrEnum):
     DEGRADED = "DEGRADED"
     UNKNOWN = "UNKNOWN"
 
+class HttpMethod(StrEnum):
+    GET = "GET"
+    HEAD = "HEAD"
+    POST = "POST"
+    PUT = "PUT"
+    PATCH = "PATCH"
+    DELETE = "DELETE"
+
+class EndpointType(StrEnum):
+    HTTP = "HTTP"
+    HTTPS = "HTTPS"
+
 class Endpoint(Base):
     __tablename__ = "endpoints"
 
@@ -52,7 +64,10 @@ class Endpoint(Base):
 
     name = mapped_column(String, nullable=False)
 
-    type: Mapped[str | None] = mapped_column(String)
+    type: Mapped[str] = mapped_column(
+        Enum(EndpointType, name="endpoint_type"),
+        nullable= False,
+        default= EndpointType.HTTPS)
 
     status: Mapped[str] = mapped_column(
         Enum(EndpointStatus, name="endpoint_status"),
@@ -68,8 +83,9 @@ class Endpoint(Base):
     description: Mapped[str | None] = mapped_column(String)
 
     method: Mapped[str] = mapped_column(
-        String,
+        Enum(HttpMethod, name="http_method"),
         nullable=False,
+        default= HttpMethod.GET
     )
 
     response_time: Mapped[int | None] = mapped_column(Integer)

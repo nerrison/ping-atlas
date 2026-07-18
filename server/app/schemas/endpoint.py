@@ -1,20 +1,21 @@
 from uuid import UUID
 from datetime import datetime
-from typing import Literal
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from .history import HistoryResponse
 from .incident import IncidentResponse
 
 from enum import StrEnum
 
+
 class EndpointStatus(StrEnum):
     UP = "UP"
     DOWN = "DOWN"
     DEGRADED = "DEGRADED"
 
-class HTTPMethod(StrEnum):
+
+class HttpMethod(StrEnum):
     GET = "GET"
     POST = "POST"
     PUT = "PUT"
@@ -24,10 +25,24 @@ class HTTPMethod(StrEnum):
 
 class EndpointBase(BaseModel):
     name: str
-    type: str | None = None
+    type: str
     url: str
     description: str | None = None
-    method: HTTPMethod
+    method: HttpMethod
+
+    @field_validator("type", mode="before")
+    @classmethod
+    def normalize_type(cls, value):
+        if isinstance(value, str):
+            return value.upper()
+        return value
+
+    @field_validator("method", mode="before")
+    @classmethod
+    def normalize_method(cls, value):
+        if isinstance(value, str):
+            return value.upper()
+        return value
 
 
 class EndpointCreate(EndpointBase):
@@ -39,27 +54,40 @@ class EndpointUpdate(BaseModel):
     type: str | None = None
     url: str | None = None
     description: str | None = None
-    method: HTTPMethod | None = None
+    method: HttpMethod | None = None
+
+    @field_validator("type", mode="before")
+    @classmethod
+    def normalize_type(cls, value):
+        if isinstance(value, str):
+            return value.upper()
+        return value
+
+    @field_validator("method", mode="before")
+    @classmethod
+    def normalize_method(cls, value):
+        if isinstance(value, str):
+            return value.upper()
+        return value
 
 
-class EndpointResponse(EndpointBase):
-    id: UUID
-    group_id: UUID
+class EndpointPut(BaseModel):
     name: str
-    status: EndpointStatus
-    response_time: int | None = None
-    last_timestamp: datetime | None = None
-    uptime: int | None = None
+    type: str | None
+    url: str
+    description: str | None
+    method: HttpMethod
 
-    created_at: datetime
+    @field_validator("type", mode="before")
+    @classmethod
+    def normalize_type(cls, value):
+        if isinstance(value, str):
+            return value.upper()
+        return value
 
-    model_config = ConfigDict(from_attributes=True)
-
-
-class EndpointDetail(BaseModel):
-    endpoint: EndpointResponse
-
-    history: list[HistoryResponse]=[]
-    incidents: list[IncidentResponse]=[]
-
-    model_config = ConfigDict(from_attributes=True)
+    @field_validator("method", mode="before")
+    @classmethod
+    def normalize_method(cls, value):
+        if isinstance(value, str):
+            return value.upper()
+        return value

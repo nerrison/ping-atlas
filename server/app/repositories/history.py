@@ -32,8 +32,7 @@ class HistoryRepository:
         )
 
         self.db.add(history)
-        self.db.commit()
-        self.db.refresh(history)
+        
         return history
 
 
